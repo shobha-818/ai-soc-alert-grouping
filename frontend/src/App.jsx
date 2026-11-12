@@ -174,6 +174,47 @@ function App() {
           )}
         </div>
 
+                {/* ADD ALERT FORM */}
+        <div style={{ marginBottom: '30px', padding: '20px', border: '1px solid #ccc', borderRadius: '8px', backgroundColor: '#fafafa' }}>
+          <h3 style={{ marginTop: 0 }}>➕ Add New Security Alert</h3>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <input 
+              placeholder="Alert Type (e.g., Failed Login)" 
+              value={form.alert_type} 
+              onChange={(e) => setForm({ ...form, alert_type: e.target.value })} 
+              required 
+              style={{ padding: '10px', flex: '1 1 200px', borderRadius: '4px', border: '1px solid #ccc' }} 
+            />
+            <select 
+              value={form.severity} 
+              onChange={(e) => setForm({ ...form, severity: e.target.value })} 
+              required 
+              style={{ padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
+            >
+              <option value="">Select Severity</option>
+              <option value="CRITICAL">CRITICAL</option>
+              <option value="HIGH">HIGH</option>
+              <option value="MEDIUM">MEDIUM</option>
+              <option value="LOW">LOW</option>
+            </select>
+            <input 
+              placeholder="Username (e.g., employee3)" 
+              value={form.username} 
+              onChange={(e) => setForm({ ...form, username: e.target.value })} 
+              style={{ padding: '10px', flex: '1 1 150px', borderRadius: '4px', border: '1px solid #ccc' }} 
+            />
+            <input 
+              placeholder="Source IP (optional)" 
+              value={form.source_ip} 
+              onChange={(e) => setForm({ ...form, source_ip: e.target.value })} 
+              style={{ padding: '10px', flex: '1 1 150px', borderRadius: '4px', border: '1px solid #ccc' }} 
+            />
+            <button type="submit" style={{ padding: '10px 20px', cursor: 'pointer', backgroundColor: '#1976d2', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}>
+              Add Alert
+            </button>
+          </form>
+        </div>
+
         {/* STAT CARDS */}
         <div style={{ display: 'flex', gap: '15px', marginBottom: '30px' }}>
           <div style={{ flex: 1, padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px', textAlign: 'center' }}>

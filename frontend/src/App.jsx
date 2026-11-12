@@ -5,6 +5,8 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import './App.css';
 
+const API_URL = 'https://ai-soc-alert-grouping.onrender.com';
+
 function App() {
   // State
   const [ipIntel, setIpIntel] = useState({});
@@ -23,7 +25,7 @@ function App() {
   // Fetch Functions
   const fetchAlerts = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/alerts');
+      const res = await axios.get(`${API_URL}/api/alerts`);
       setAlerts(res.data.alerts);
     } catch (err) {
       console.error(err);
@@ -32,7 +34,7 @@ function App() {
 
   const fetchIncidentsAndAnalyze = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/incidents');
+      const res = await axios.get(`${API_URL}/api/incidents`);
       setIncidents(res.data.incidents);
 
       if (res.data.incidents.length > 0) {
@@ -40,7 +42,7 @@ function App() {
         const analyses = {};
         
         for (const incident of res.data.incidents) {
-          const aiRes = await axios.post('http://localhost:5000/api/ai/analyze', { incident });
+          const aiRes = await axios.post(`${API_URL}/api/ai/analyze`, { incident });
           analyses[incident.username] = aiRes.data.analysis;
         }
         
@@ -62,7 +64,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/alerts', form);
+      await axios.post(`${API_URL}/api/alerts`, form);
       setForm({ alert_type: '', severity: '', username: '' });
       fetchAlerts();
       fetchIncidentsAndAnalyze();
@@ -73,7 +75,7 @@ function App() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      await axios.put(`http://localhost:5000/api/alerts/${id}`, { status: newStatus });
+      await axios.put(`${API_URL}/api/alerts/${id}`, { status: newStatus });
       fetchAlerts();
     } catch (err) {
       console.error(err);
@@ -84,7 +86,7 @@ function App() {
     if (!ip) return;
     setIpIntel(prev => ({ ...prev, [ip]: { message: 'Checking...' } }));
     try {
-      const res = await axios.post('http://localhost:5000/api/threat-intel', { ip });
+      const res = await axios.post(`${API_URL}/api/threat-intel`, { ip });
       setIpIntel(prev => ({ ...prev, [ip]: res.data.result }));
     } catch (err) {
       setIpIntel(prev => ({ ...prev, [ip]: { message: 'Error checking IP' } }));
@@ -98,7 +100,7 @@ function App() {
     setChatLoading(true);
     setChatAnswer('');
     try {
-      const res = await axios.post('http://localhost:5000/api/ai/chat', { question: chatQuestion });
+      const res = await axios.post(`${API_URL}/api/ai/chat`, { question: chatQuestion });
       setChatAnswer(res.data.answer);
     } catch (err) {
       setChatAnswer("Sorry, I couldn't process that request. Check if the backend is running.");
